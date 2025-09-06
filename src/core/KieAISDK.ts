@@ -1,33 +1,46 @@
-import { HttpClient } from './HttpClient';
-import type { SDKConfig } from '../types/common';
+import { HttpClient } from "./HttpClient";
+import { GPT4oImageModule } from "../modules/GPT4oImageModule";
+import { FluxKontextModule } from "../modules/FluxKontextModule";
+import { MidjourneyModule } from "../modules/MidjourneyModule";
+import { RunwayModule } from "../modules/RunwayModule";
+import type { SDKConfig } from "../types/common";
 
 export class KieAISDK {
-  private readonly apiKey: string;
   private readonly httpClient: HttpClient;
-  
-  constructor(apiKey: string, config?: SDKConfig) {
-    if (!apiKey) {
-      throw new Error('API Key 是必需的');
+
+  public readonly gptImage: GPT4oImageModule;
+  public readonly fluxKontext: FluxKontextModule;
+  public readonly midjourney: MidjourneyModule;
+  public readonly runway: RunwayModule;
+
+  constructor(config: SDKConfig) {
+    if (!config.apiKey) {
+      throw new Error("API Key is required");
     }
-    
-    this.apiKey = apiKey;
+
     this.httpClient = new HttpClient({
       ...config,
-      apiKey
+      apiKey: config.apiKey,
     });
+
+    // 初始化模块
+    this.gptImage = new GPT4oImageModule(this.httpClient);
+    this.fluxKontext = new FluxKontextModule(this.httpClient);
+    this.midjourney = new MidjourneyModule(this.httpClient);
+    this.runway = new RunwayModule(this.httpClient);
   }
-  
+
   /**
    * 获取 HTTP 客户端实例
    */
   getHttpClient(): HttpClient {
     return this.httpClient;
   }
-  
+
   /**
    * 创建新的 SDK 实例
    */
-  static create(apiKey: string, config?: SDKConfig): KieAISDK {
-    return new KieAISDK(apiKey, config);
+  static create(config: SDKConfig): KieAISDK {
+    return new KieAISDK(config);
   }
 }

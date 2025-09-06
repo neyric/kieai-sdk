@@ -3,10 +3,10 @@
  */
 export enum KieErrorCode {
   // HTTP 状态码相关
-  BAD_REQUEST = 400,           // 参数验证错误
-  TIMEOUT = 408,               // 请求超时
+  BAD_REQUEST = 400, // 参数验证错误
+  TIMEOUT = 408, // 请求超时
   INTERNAL_SERVER_ERROR = 500, // 网络错误/未知错误
-  
+
   // 配置错误
   CONFIG_ERROR = 1000,
 }
@@ -16,20 +16,20 @@ export enum KieErrorCode {
  */
 export enum KieErrorType {
   // 网络相关错误
-  NETWORK_ERROR = 'NETWORK_ERROR',
-  TIMEOUT_ERROR = 'TIMEOUT_ERROR',
-  
+  NETWORK_ERROR = "NETWORK_ERROR",
+  TIMEOUT_ERROR = "TIMEOUT_ERROR",
+
   // API业务错误
-  API_ERROR = 'API_ERROR',
-  
+  API_ERROR = "API_ERROR",
+
   // 参数验证错误
-  VALIDATION_ERROR = 'VALIDATION_ERROR',
-  
+  VALIDATION_ERROR = "VALIDATION_ERROR",
+
   // 配置错误
-  CONFIG_ERROR = 'CONFIG_ERROR',
-  
+  CONFIG_ERROR = "CONFIG_ERROR",
+
   // 未知错误
-  UNKNOWN_ERROR = 'UNKNOWN_ERROR'
+  UNKNOWN_ERROR = "UNKNOWN_ERROR",
 }
 
 /**
@@ -40,17 +40,17 @@ export class KieError extends Error {
    * 错误代码
    */
   public readonly code: number;
-  
+
   /**
    * 错误类型
    */
   public readonly type: KieErrorType;
-  
+
   /**
    * 原始错误对象（如果有）
    */
   public readonly originalError?: Error;
-  
+
   /**
    * 请求相关信息（用于调试）
    */
@@ -60,7 +60,7 @@ export class KieError extends Error {
     params?: any;
     headers?: Record<string, string>;
   };
-  
+
   /**
    * API返回的原始响应（如果有）
    */
@@ -76,19 +76,19 @@ export class KieError extends Error {
     type: KieErrorType = KieErrorType.UNKNOWN_ERROR,
     options?: {
       originalError?: Error;
-      requestInfo?: KieError['requestInfo'];
-      apiResponse?: KieError['apiResponse'];
+      requestInfo?: KieError["requestInfo"];
+      apiResponse?: KieError["apiResponse"];
     }
   ) {
     super(message);
-    
-    this.name = 'KieError';
+
+    this.name = "KieError";
     this.code = code;
     this.type = type;
     this.originalError = options?.originalError;
     this.requestInfo = options?.requestInfo;
     this.apiResponse = options?.apiResponse;
-    
+
     // 保持正确的错误堆栈
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, KieError);
@@ -99,23 +99,26 @@ export class KieError extends Error {
    * 判断是否为网络相关错误
    */
   isNetworkError(): boolean {
-    return this.type === KieErrorType.NETWORK_ERROR || this.type === KieErrorType.TIMEOUT_ERROR;
+    return (
+      this.type === KieErrorType.NETWORK_ERROR ||
+      this.type === KieErrorType.TIMEOUT_ERROR
+    );
   }
-  
+
   /**
    * 判断是否为API业务错误
    */
   isApiError(): boolean {
     return this.type === KieErrorType.API_ERROR;
   }
-  
+
   /**
    * 判断是否为参数验证错误
    */
   isValidationError(): boolean {
     return this.type === KieErrorType.VALIDATION_ERROR;
   }
-  
+
   /**
    * 获取详细的错误信息对象
    */
@@ -126,13 +129,15 @@ export class KieError extends Error {
       code: this.code,
       type: this.type,
       stack: this.stack,
-      originalError: this.originalError ? {
-        name: this.originalError.name,
-        message: this.originalError.message,
-        stack: this.originalError.stack
-      } : undefined,
+      originalError: this.originalError
+        ? {
+            name: this.originalError.name,
+            message: this.originalError.message,
+            stack: this.originalError.stack,
+          }
+        : undefined,
       requestInfo: this.requestInfo,
-      apiResponse: this.apiResponse
+      apiResponse: this.apiResponse,
     };
   }
 }
@@ -143,7 +148,7 @@ export class KieError extends Error {
 export function createApiError(
   error: string,
   message: string,
-  requestInfo?: KieError['requestInfo']
+  requestInfo?: KieError["requestInfo"]
 ): KieError {
   return new KieError(
     `API Error: ${message}`,
@@ -151,7 +156,7 @@ export function createApiError(
     KieErrorType.API_ERROR,
     {
       apiResponse: { error, message },
-      requestInfo
+      requestInfo,
     }
   );
 }
@@ -162,7 +167,7 @@ export function createApiError(
 export function createNetworkError(
   message: string,
   originalError?: Error,
-  requestInfo?: KieError['requestInfo']
+  requestInfo?: KieError["requestInfo"]
 ): KieError {
   return new KieError(
     message,
@@ -170,7 +175,7 @@ export function createNetworkError(
     KieErrorType.NETWORK_ERROR,
     {
       originalError,
-      requestInfo
+      requestInfo,
     }
   );
 }
@@ -187,7 +192,7 @@ export function createValidationError(
     KieErrorCode.BAD_REQUEST,
     KieErrorType.VALIDATION_ERROR,
     {
-      requestInfo: invalidParam ? { params: { invalidParam } } : undefined
+      requestInfo: invalidParam ? { params: { invalidParam } } : undefined,
     }
   );
 }

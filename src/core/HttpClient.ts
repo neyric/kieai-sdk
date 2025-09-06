@@ -67,6 +67,13 @@ export class HttpClient {
 
       const responseData = await response.json();
 
+      // 处理统一响应结构 {code, msg, data}
+      if (responseData.code !== undefined) {
+        // 如果是 KieAI 统一响应格式，直接返回，让各模块自己判断 code 状态
+        return responseData;
+      }
+
+      // 处理旧版本的错误格式
       if (responseData.error) {
         throw createApiError(
           responseData.error,
