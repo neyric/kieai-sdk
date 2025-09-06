@@ -142,3 +142,78 @@ export interface RunwayTaskData {
   /** 失败消息（失败时才有） */
   failMsg?: string;
 }
+
+type RunwayAlephAspectRatio = RunwayAspectRatio & "21:9";
+
+/**
+ * Runway Aleph 视频生成请求参数
+ */
+export interface RunwayAlephGenerateOptions {
+  /**
+   * 指导 AI 视频转换的描述性文本。请具体描述主题、动作、风格和设置。描述如何根据提示词对参考视频内容进行转换或修改。
+   *
+   * **最佳实践：**
+   * - 专注于转换和风格变化，而不是描述视频中已有的内容
+   * - 包含镜头运动描述（例如：“缓慢放大”、“轨道旋转”）
+   * - 添加时间元素（例如：“逐渐地”、“平滑地”、“突然地”）
+   * - 如有需要，指定照明和氛围变化
+   *
+   * @example "转换为梦幻水彩画风格，配以柔和流动的运动效果"
+   * */
+  prompt: string;
+
+  /**
+   * 用作视频生成基础的参考视频 URL。AI 将根据提示词对该视频进行转换和增强。
+   * - 最大文件大小：10MB
+   * - 必须通过 HTTPS 访问
+   *  */
+  videoUrl: string;
+
+  /** 接收 AI 视频生成任务完成更新的 URL。当视频生成完成时，系统将向此 URL 发送 POST 请求，包含任务状态和结果 */
+  callBackUrl?: string;
+
+  /** 可选的水印文本内容。空字符串表示无水印，非空字符串将在视频中显示指定文本作为水印。 */
+  waterMark?: string;
+
+  /** 上传方式选择。默认值为 false（S3/R2），设置为 true 使用阿里云 OSS 上传，设置为 false 使用海外 R2 服务器上传。 */
+  uploadCn?: boolean;
+
+  /** 视频纵横比 */
+  aspectRatio?: RunwayAlephAspectRatio;
+
+  /** 随机种子。用于结果可复现。 */
+  seed?: number;
+
+  /** 参考图像 URL，用于影响输出的风格或内容。 */
+  referenceImage?: string;
+}
+
+/**
+ * Runway Aleph 视频生成响应
+ */
+export interface RunwayAlephGenerateResponse {
+  /** 生成任务的唯一标识符，可与 `获取 Aleph 视频详情` 一起使用来查询任务状态 */
+  taskId: string;
+}
+
+export interface RunwayAlephGenerateResponse {
+  taskId: string;
+  resultVideoUrl: string;
+  resultImageUrl: string;
+}
+
+export interface RunwayAlephGenerateResult {
+  taskId: string;
+  paramJson: string;
+  response: RunwayAlephGenerateResponse | null;
+  completeTime: string | null;
+  createTime: string;
+  /**
+   * 成功状态指示符：1：视频生成成功 / 0：生成失败或仍在进行中
+   */
+  successFlag: 0 | 1;
+  /** 生成失败时的错误码（成功时为 0） */
+  errorCode: number;
+  /** 解释失败原因的详细错误消息（成功时为空） */
+  errorMessage: string;
+}
