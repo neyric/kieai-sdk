@@ -15,8 +15,6 @@ import {
  * GPT-4o 图片生成模块
  */
 export class GPT4oImageModule extends BaseModule {
-  protected readonly apiPath = "/api/v1/gpt4o-image";
-
   async generate(options: GeneratorGPT4oImageOptions) {
     const response = await this.httpClient.post<GeneratorGPT4oImageResponse>(
       `/api/v1/gpt4o-image/generate`,
