@@ -5,19 +5,19 @@
 /**
  * 支持的视频宽高比
  */
-export type RunwayAspectRatio = 
-  | '16:9'     // 宽屏 HD（推荐）
-  | '9:16'     // 移动端竖屏
-  | '1:1'      // 正方形
-  | '4:3'      // 传统显示屏
-  | '3:4';     // 竖版
+export type RunwayAspectRatio =
+  | "16:9" // 宽屏 HD（推荐）
+  | "9:16" // 移动端竖屏
+  | "1:1" // 正方形
+  | "4:3" // 传统显示屏
+  | "3:4"; // 竖版
 
 /**
  * 视频质量设置
  */
-export type RunwayVideoQuality = 
-  | '720p'     // HD 高清（兼容 5秒和10秒）
-  | '1080p';   // Full HD 全高清（仅支持5秒）
+export type RunwayVideoQuality =
+  | "720p" // HD 高清（兼容 5秒和10秒）
+  | "1080p"; // Full HD 全高清（仅支持5秒）
 
 /**
  * 视频时长（秒）
@@ -27,20 +27,12 @@ export type RunwayVideoDuration = 5 | 10;
 /**
  * 任务状态
  */
-export type RunwayTaskState = 
-  | 'wait'       // 等待中
-  | 'queueing'   // 排队中
-  | 'generating' // 生成中
-  | 'success'    // 成功
-  | 'fail';      // 失败
-
-/**
- * 生成类型
- */
-export type RunwayGenerationType = 
-  | 'text_to_video'      // 文本转视频
-  | 'image_to_video'     // 图片转视频
-  | 'video_extension';   // 视频扩展
+export type RunwayTaskState =
+  | "wait" // 等待中
+  | "queueing" // 排队中
+  | "generating" // 生成中
+  | "success" // 成功
+  | "fail"; // 失败
 
 /**
  * 基础生成请求参数
@@ -48,51 +40,59 @@ export type RunwayGenerationType =
 export interface RunwayBaseGenerateRequest {
   /** 文本描述（必需） */
   prompt: string;
-  
-  /** 视频时长，默认 5 秒 */
-  duration?: RunwayVideoDuration;
-  
-  /** 视频质量，默认 '720p' */
-  quality?: RunwayVideoQuality;
-  
-  /** 视频宽高比，默认 '16:9' */
-  aspectRatio?: RunwayAspectRatio;
-  
-  /** 水印文本 */
+
+  /**
+   * 视频时长，可选值为5或10。如果选10秒视频，则无法使用1080p分辨率
+   */
+  duration: RunwayVideoDuration;
+
+  /** 视频分辨率，可选值为720p或1080p。如果选择了1080p，则无法生成10秒的视频 */
+  quality: RunwayVideoQuality;
+
+  /** 视频宽高比参数。所有视频生成请求的必填参数。 */
+  aspectRatio: RunwayAspectRatio;
+
+  /** 可选的参考图像URL，作为视频的基础。提供后，AI将创建一个为此图像添加动画或扩展的视频。 */
+  imageUrl?: string;
+
+  /**
+   * 视频水印文本内容。
+   * 空字符串表示不添加水印，非空字符串将在视频右下角显示指定的水印文本。
+   * */
   waterMark?: string;
-  
+
   /** 回调 URL */
   callBackUrl?: string;
 }
 
-/**
- * 文本转视频请求参数
- */
-export interface RunwayTextToVideoRequest extends RunwayBaseGenerateRequest {
-  // 继承基础参数
-}
+/** 文本转视频请求参数 */
+export type RunwayTextToVideoOptions = Omit<
+  RunwayBaseGenerateRequest,
+  "imageUrl"
+>;
 
-/**
- * 图片转视频请求参数
- */
-export interface RunwayImageToVideoRequest extends RunwayBaseGenerateRequest {
+/** 图片转视频请求参数 */
+export type RunwayImageToVideoOptions = RunwayBaseGenerateRequest & {
   /** 输入图片 URL（必需） */
   imageUrl: string;
-}
+};
 
 /**
  * 视频扩展请求参数
  */
 export interface RunwayExtendVideoRequest {
-  /** 原始任务 ID（必需） */
+  /** 原始视频生成任务的唯一标识符。必须是来自先前生成视频的有效任务ID。 */
   taskId: string;
-  
-  /** 扩展描述（必需） */
+
+  /** 指导视频续集的描述性文本。解释接下来应该发生什么动作、动态或发展。要具体但保持与原始视频内容的一致性。 */
   prompt: string;
-  
-  /** 视频质量，默认 '720p' */
+
+  /** 视频分辨率，可选值为720p或1080p */
   quality?: RunwayVideoQuality;
-  
+
+  /** 视频水印文本内容。空字符串表示不添加水印，非空字符串将在视频右下角显示指定的水印文本。 */
+  watermark?: string;
+
   /** 回调 URL */
   callBackUrl?: string;
 }
@@ -101,25 +101,15 @@ export interface RunwayExtendVideoRequest {
  * 生成响应
  */
 export interface RunwayGenerateResponse {
-  code: number;
-  msg: string;
-  data: {
-    taskId: string;
-  };
+  taskId: string;
 }
 
-/**
- * 视频信息
- */
-export interface RunwayVideoInfo {
-  /** 视频 ID */
-  videoId: string;
-  
-  /** 视频 URL */
-  videoUrl: string;
-  
-  /** 缩略图 URL */
-  imageUrl: string;
+/** 视频信息 */
+export interface RunwayVideoResult {
+  task_id: string;
+  video_id: string;
+  video_url: string;
+  image_url: string;
 }
 
 /**
@@ -128,125 +118,27 @@ export interface RunwayVideoInfo {
 export interface RunwayTaskData {
   /** 任务 ID */
   taskId: string;
-  
+  /** 仅适用于延长任务 - 被延长的原始视频的任务ID。标准生成任务时为空 */
+  parentTaskId?: string;
+  /** 用于视频生成或延长的参数 */
+  generateParam?: {
+    /** 用于引导AI视频生成的文本提示词 */
+    prompt: string;
+    /** 用于视频生成的参考图像URL或视频延长开始的帧图像URL */
+    imageUrl: string;
+    /** 生成过程中是否使用了AI提示词增强功能 */
+    expandPrompt: boolean;
+  };
   /** 任务状态 */
   state: RunwayTaskState;
-  
-  /** 生成时间 */
-  generateTime: string;
-  
-  /** 视频信息（成功时才有） */
-  videoInfo?: RunwayVideoInfo;
-  
-  /** 过期标志（0=未过期，1=已过期） */
+  /** 视频生成完成的时间戳 */
+  generateTime?: string;
+  /** 生成的视频详情，仅当状态为'success'时可用 */
+  videoInfo?: RunwayVideoResult;
+  /** 指示视频是否已过期：0 = 有效（仍可使用），1 = 已过期（不再可用） */
   expireFlag: 0 | 1;
-  
+  /** 错误码 */
+  failCode?: number;
   /** 失败消息（失败时才有） */
   failMsg?: string;
-}
-
-/**
- * 任务状态查询响应
- */
-export interface RunwayTaskDetailsResponse {
-  code: number;
-  msg: string;
-  data: RunwayTaskData;
-}
-
-/**
- * 回调数据结构
- */
-export interface RunwayCallbackData {
-  code: number;
-  msg: string;
-  data: RunwayTaskData;
-}
-
-/**
- * 文本转视频选项（用户接口）
- */
-export interface RunwayTextToVideoOptions {
-  /** 文本描述（必需） */
-  prompt: string;
-  
-  /** 视频时长，默认 5 秒 */
-  duration?: RunwayVideoDuration;
-  
-  /** 视频质量，默认 '720p' */
-  quality?: RunwayVideoQuality;
-  
-  /** 视频宽高比，默认 '16:9' */
-  aspectRatio?: RunwayAspectRatio;
-  
-  /** 水印文本 */
-  waterMark?: string;
-  
-  /** 回调 URL */
-  callBackUrl?: string;
-}
-
-/**
- * 图片转视频选项（用户接口）
- */
-export interface RunwayImageToVideoOptions {
-  /** 文本描述（必需） */
-  prompt: string;
-  
-  /** 输入图片 URL（必需） */
-  imageUrl: string;
-  
-  /** 视频时长，默认 5 秒 */
-  duration?: RunwayVideoDuration;
-  
-  /** 视频质量，默认 '720p' */
-  quality?: RunwayVideoQuality;
-  
-  /** 视频宽高比，默认 '16:9' */
-  aspectRatio?: RunwayAspectRatio;
-  
-  /** 水印文本 */
-  waterMark?: string;
-  
-  /** 回调 URL */
-  callBackUrl?: string;
-}
-
-/**
- * 视频扩展选项（用户接口）
- */
-export interface RunwayExtendVideoOptions {
-  /** 原始任务 ID（必需） */
-  taskId: string;
-  
-  /** 扩展描述（必需） */
-  prompt: string;
-  
-  /** 视频质量，默认 '720p' */
-  quality?: RunwayVideoQuality;
-  
-  /** 回调 URL */
-  callBackUrl?: string;
-}
-
-/**
- * 等待完成选项
- */
-export interface RunwayWaitForCompletionOptions {
-  /** 最大等待时间（毫秒），默认 600000 (10分钟) */
-  maxWaitTime?: number;
-  
-  /** 轮询间隔（毫秒），默认 30000 (30秒) */
-  pollInterval?: number;
-  
-  /** 进度回调函数 */
-  onProgress?: (taskData: RunwayTaskData) => void;
-}
-
-/**
- * 生成结果（成功时的任务数据）
- */
-export interface RunwayGenerationResult extends RunwayTaskData {
-  state: 'success';
-  videoInfo: RunwayVideoInfo;
 }
