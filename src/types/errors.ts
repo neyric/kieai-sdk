@@ -1,3 +1,4 @@
+import { type APIResponse } from "./common";
 /**
  * 错误代码常量
  */
@@ -64,11 +65,7 @@ export class KieError extends Error {
   /**
    * API返回的原始响应（如果有）
    */
-  public readonly apiResponse?: {
-    error?: string;
-    message?: string;
-    [key: string]: any;
-  };
+  public readonly apiResponse?: APIResponse;
 
   constructor(
     message: string,
@@ -146,16 +143,15 @@ export class KieError extends Error {
  * 创建API错误的便捷方法
  */
 export function createApiError(
-  error: string,
-  message: string,
+  response: APIResponse,
   requestInfo?: KieError["requestInfo"]
 ): KieError {
   return new KieError(
-    `API Error: ${message}`,
+    `API Error: ${response.msg}`,
     KieErrorCode.BAD_REQUEST,
     KieErrorType.API_ERROR,
     {
-      apiResponse: { error, message },
+      apiResponse: response,
       requestInfo,
     }
   );

@@ -7,5 +7,5 @@ export interface SDKConfig {
 export interface APIResponse<T = unknown> {
   code: 200 | 401 | 402 | 404 | 422 | 429 | 455 | 500;
   msg: string;
-  data?: T;
+  data: T;
 }

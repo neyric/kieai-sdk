@@ -1,3 +1,4 @@
+import type { APIResponse } from "../types/common";
 import {
   KieError,
   KieErrorType,
@@ -30,7 +31,7 @@ export class HttpClient {
     this.apiKey = config.apiKey;
   }
 
-  async request<T = any>(
+  async request<T = unknown>(
     url: string,
     options: RequestOptions = {}
   ): Promise<T> {
@@ -42,14 +43,11 @@ export class HttpClient {
       const queryString = new URLSearchParams(params).toString();
       requestURL += `?${queryString}`;
     }
-
-    const requestHeaders: Record<string, string> = {
-      "Content-Type": "application/json",
-      ...headers,
-    };
+    const requestHeaders = new Headers(headers);
+    requestHeaders.set("Content-Type", "application/json");
 
     if (this.apiKey) {
-      requestHeaders["Authorization"] = `Bearer ${this.apiKey}`;
+      requestHeaders.set("Authorization", `Bearer ${this.apiKey}`);
     }
 
     const controller = new AbortController();
@@ -65,29 +63,34 @@ export class HttpClient {
 
       clearTimeout(timeoutId);
 
-      const responseData = await response.json();
-
-      // 处理统一响应结构 {code, msg, data}
-      if (responseData.code !== undefined) {
-        // 如果是 KieAI 统一响应格式，直接返回，让各模块自己判断 code 状态
-        return responseData;
-      }
-
-      // 处理旧版本的错误格式
-      if (responseData.error) {
-        throw createApiError(
-          responseData.error,
-          responseData.message || "未知API错误",
+      if (!response.ok) {
+        throw new KieError(
+          response.statusText,
+          KieErrorCode.INTERNAL_SERVER_ERROR,
+          KieErrorType.UNKNOWN_ERROR,
           {
-            method,
-            url: requestURL,
-            params,
-            headers: requestHeaders,
+            requestInfo: {
+              method,
+              url: requestURL,
+              params,
+              headers: requestHeaders.toJSON(),
+            },
           }
         );
       }
+      const responseData = (await response.json()) as APIResponse<T>;
 
-      return responseData;
+      // 处理旧版本的错误格式
+      if (responseData.code !== 200) {
+        throw createApiError(responseData, {
+          method,
+          url: requestURL,
+          params,
+          headers: requestHeaders.toJSON(),
+        });
+      }
+
+      return responseData.data;
     } catch (error) {
       clearTimeout(timeoutId);
 
@@ -108,7 +111,7 @@ export class HttpClient {
                 method,
                 url: requestURL,
                 params,
-                headers: requestHeaders,
+                headers: requestHeaders.toJSON(),
               },
             }
           );
@@ -119,7 +122,7 @@ export class HttpClient {
           method,
           url: requestURL,
           params,
-          headers: requestHeaders,
+          headers: requestHeaders.toJSON(),
         });
       }
 
@@ -133,22 +136,22 @@ export class HttpClient {
             method,
             url: requestURL,
             params,
-            headers: requestHeaders,
+            headers: requestHeaders.toJSON(),
           },
         }
       );
     }
   }
 
-  async get<T = any>(url: string, params?: Record<string, any>): Promise<T> {
+  async get<T = unknown>(url: string, params?: Record<string, any>) {
     return this.request<T>(url, { method: "GET", params });
   }
 
-  async post<T = any>(
+  async post<T = unknown>(
     url: string,
     data?: any,
     params?: Record<string, any>
-  ): Promise<T> {
+  ) {
     return this.request<T>(url, { method: "POST", data, params });
   }
 }

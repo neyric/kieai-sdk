@@ -146,3 +146,8 @@ export interface DownloadUrlRequest {
 export interface DownloadUrlResponse {
   downloadUrl: string;
 }
+
+/**
+ * 任务状态查询响应
+ */
+export type TaskDetailsResponse = TaskData;
