@@ -1,0 +1,35 @@
+# 源代码
+src/
+examples/
+test-sdk.ts
+
+# 配置文件
+tsconfig.json
+tsconfig.build.json
+.env
+.env.example
+bun.lockb
+
+# 开发文档
+API.md
+*.log
+
+# Git
+.git/
+.gitignore
+
+# 测试
+__tests__/
+*.test.ts
+coverage/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# 构建缓存
+node_modules/
+*.tsbuildinfo

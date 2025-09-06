@@ -1,0 +1,48 @@
+{
+  "name": "kieai-sdk",
+  "version": "0.1.0",
+  "description": "KieAI API SDK - 提供完整的 AI API 访问功能",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.js"
+    }
+  },
+  "scripts": {
+    "build": "bun run build:clean && bun run build:esm && bun run build:types",
+    "build:clean": "rm -rf lib",
+    "build:esm": "bun build ./src/index.ts --format esm --target node --outfile ./lib/index.js",
+    "build:types": "tsc -p tsconfig.build.json",
+    "test": "bun test",
+    "prepublishOnly": "bun run build"
+  },
+  "files": [
+    "lib",
+    "README.md"
+  ],
+  "keywords": [
+    "kie-ai",
+    "ai",
+    "api",
+    "sdk",
+    "artificial-intelligence",
+    "veo3",
+    "kling",
+    "gpt-image"
+  ],
+  "author": "Neyric <finegn@outlook.com>",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
