@@ -108,7 +108,7 @@ export interface MidjourneyGenerateRequest {
    * - 使用 Omni 参考功能，允许您将参考图像中的角色、物体、车辆或非人类生物放入您的 Midjourney 创作中
    * - 数值越高，参考影响越强，数值越低，允许更多创意解释
    */
-  ow: number;
+  ow?: number;
 
   /** 水印标识符 */
   watermark?: string;
@@ -135,7 +135,7 @@ export interface MidjourneyGenerateRequest {
    * 仅在 taskType 为 'mj_video' 或 'mj_video_hd' 时有效
    * @default "high"
    */
-  motion: MidjourneyMotion;
+  motion?: MidjourneyMotion;
 }
 
 /** 扩展 Midjourney 视频 */
