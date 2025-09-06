@@ -19,6 +19,9 @@ export enum TaskStatusCode {
   FAILED = 2,
 }
 
+export interface GPT4oImageResponse {
+  result_urls: string[];
+}
 /**
  * API 请求参数
  */
@@ -110,9 +113,7 @@ export interface TaskData {
   completeTime: number | null;
 
   /** 响应结果 */
-  response: {
-    result_urls: string[];
-  } | null;
+  response: GPT4oImageResponse | null;
 
   /** 任务状态标志 */
   successFlag: TaskStatusCode;
@@ -151,3 +152,8 @@ export interface DownloadUrlResponse {
  * 任务状态查询响应
  */
 export type TaskDetailsResponse = TaskData;
+
+export interface GPT4oImageCallbackData {
+  taskId: string;
+  info: GPT4oImageResponse;
+}

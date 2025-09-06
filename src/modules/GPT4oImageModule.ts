@@ -9,6 +9,7 @@ import {
   type TaskDetailsResponse,
   type DownloadUrlRequest,
   type DownloadUrlResponse,
+  type GPT4oImageCallbackData,
 } from "../types/modules/gpt-image";
 
 /**
@@ -85,5 +86,15 @@ export class GPT4oImageModule extends BaseModule {
     );
 
     return response;
+  }
+
+  /**
+   * 验证 Callback 请求，返回对应的 Task 结果
+   * @param callbakData callback 携带的数据
+   */
+  async verifyCallback(callbakData: unknown) {
+    const data = callbakData as GPT4oImageCallbackData;
+    if (!data.taskId) throw createValidationError("Unvalid taskID");
+    return this.getTaskStatus(data.taskId);
   }
 }

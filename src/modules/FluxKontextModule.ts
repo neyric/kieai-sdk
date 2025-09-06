@@ -6,7 +6,8 @@ import {
   type FluxTaskDetailsResponse,
   type FluxGenerateOptions,
   type FluxEditOptions,
-  type FluxTaskData,
+  type FluxKontextTaskData,
+  type FluxKontextCallbackData,
 } from "../types/modules/flux-kontext";
 
 /**
@@ -47,7 +48,7 @@ export class FluxKontextModule extends BaseModule {
    * @param taskId 任务ID
    * @returns 任务详情
    */
-  async getTaskStatus(taskId: string): Promise<FluxTaskData> {
+  async getTaskStatus(taskId: string): Promise<FluxKontextTaskData> {
     if (!taskId) {
       throw createValidationError("taskId is required");
     }
@@ -58,5 +59,15 @@ export class FluxKontextModule extends BaseModule {
     );
 
     return response;
+  }
+
+  /**
+   * 验证 Callback 请求，返回对应的 Task 结果
+   * @param callbakData callback 携带的数据
+   */
+  async verifyCallback(callbakData: unknown) {
+    const data = callbakData as FluxKontextCallbackData;
+    if (!data.taskId) throw createValidationError("Unvalid taskID");
+    return this.getTaskStatus(data.taskId);
   }
 }

@@ -108,7 +108,7 @@ export interface FluxKontextGenerateResponse {
 /**
  * 任务完成后的响应结果
  */
-export interface FluxTaskResponse {
+export interface FluxKontextTaskResponse {
   /** 生成的结果图片 URL */
   resultImageUrl: string;
 
@@ -119,7 +119,7 @@ export interface FluxTaskResponse {
 /**
  * 任务详情响应中的任务数据
  */
-export interface FluxTaskData {
+export interface FluxKontextTaskData {
   /** 任务 ID */
   taskId: string;
 
@@ -130,7 +130,7 @@ export interface FluxTaskData {
   completeTime: number | null;
 
   /** 响应结果 */
-  response: FluxTaskResponse | null;
+  response: FluxKontextTaskResponse | null;
 
   /** 任务状态标志 */
   successFlag: FluxTaskStatus;
@@ -148,20 +148,20 @@ export interface FluxTaskData {
 /**
  * 任务状态查询响应
  */
-export type FluxTaskDetailsResponse = FluxTaskData;
+export type FluxTaskDetailsResponse = FluxKontextTaskData;
 
 /**
  * 回调响应数据结构
  */
-export interface FluxCallbackData {
+export interface FluxKontextCallbackData {
   taskId: string;
-  info: FluxTaskResponse;
+  info: FluxKontextTaskResponse;
 }
 
 /**
  * 图片生成选项（文本生成图片）
  */
-export type FluxGenerateOptions = FluxKontextGenerateRequest
+export type FluxGenerateOptions = FluxKontextGenerateRequest;
 
 /**
  * 图片编辑选项
