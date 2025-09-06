@@ -3,6 +3,7 @@ import { GPT4oImageModule } from "../modules/GPT4oImageModule";
 import { FluxKontextModule } from "../modules/FluxKontextModule";
 import { MidjourneyModule } from "../modules/MidjourneyModule";
 import { RunwayModule } from "../modules/RunwayModule";
+import { Veo3Module } from "../modules/Veo3Module";
 import type { SDKConfig } from "../types/common";
 
 export class KieAISDK {
@@ -12,6 +13,7 @@ export class KieAISDK {
   public readonly fluxKontext: FluxKontextModule;
   public readonly midjourney: MidjourneyModule;
   public readonly runway: RunwayModule;
+  public readonly veo3: Veo3Module;
 
   constructor(config: SDKConfig) {
     if (!config.apiKey) {
@@ -28,6 +30,7 @@ export class KieAISDK {
     this.fluxKontext = new FluxKontextModule(this.httpClient);
     this.midjourney = new MidjourneyModule(this.httpClient);
     this.runway = new RunwayModule(this.httpClient);
+    this.veo3 = new Veo3Module(this.httpClient);
   }
 
   /**
