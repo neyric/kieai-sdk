@@ -5,7 +5,7 @@ import { MidjourneyModule } from "../modules/MidjourneyModule";
 import { RunwayModule } from "../modules/RunwayModule";
 import { Veo3Module } from "../modules/Veo3Module";
 
-interface SDKConfig {
+export interface SDKConfig {
   baseURL?: string;
   timeout?: number;
   apiKey: string;
