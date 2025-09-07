@@ -26,7 +26,7 @@ interface JobsResult<M = ""> {
 export class JobsModule<I = {}, R = {}, M = ""> extends BaseModule {
   constructor(
     private model: M,
-    config: ConstructorParameters<typeof BaseModule>
+    ...config: ConstructorParameters<typeof BaseModule>
   ) {
     super(...config);
   }
