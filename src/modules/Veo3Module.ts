@@ -1,10 +1,10 @@
 import { BaseModule } from '../core/BaseModule';
 import { createValidationError } from '../types/errors';
 import {
-  type Veo3TextToVideoOptions,
+  type Veo3GenerateOptions,
   type Veo3ImageToVideoOptions,
   type Veo3ExtendVideoOptions,
-  type Veo3TextToVideoRequest,
+  type Veo3GenerateOptions,
   type Veo3ImageToVideoRequest,
   type Veo3ExtendVideoRequest,
   type Veo3GenerateResponse,
@@ -23,7 +23,7 @@ export class Veo3Module extends BaseModule {
   /**
    * 基础生成方法 - 统一入口
    */
-  private async generate(request: Veo3TextToVideoRequest | Veo3ImageToVideoRequest) {
+  private async generate(request: Veo3GenerateOptions | Veo3ImageToVideoRequest) {
     return this.httpClient.post<Veo3GenerateResponse>(
       `${this.apiPath}/generate`,
       request
@@ -35,10 +35,10 @@ export class Veo3Module extends BaseModule {
    * @param options 生成选项
    * @returns 生成响应
    */
-  async generateTextToVideo(options: Veo3TextToVideoOptions) {
+  async generateTextToVideo(options: Veo3GenerateOptions) {
     this.validateTextToVideoOptions(options);
 
-    const request: Veo3TextToVideoRequest = {
+    const request: Veo3GenerateOptions = {
       prompt: options.prompt,
       duration: options.duration || 5,
       quality: options.quality || '720p',
@@ -47,7 +47,7 @@ export class Veo3Module extends BaseModule {
       callBackUrl: options.callBackUrl,
     };
 
-    return this.generate(this.cleanParams(request) as Veo3TextToVideoRequest);
+    return this.generate(this.cleanParams(request) as Veo3GenerateOptions);
   }
 
   /**
@@ -164,7 +164,7 @@ export class Veo3Module extends BaseModule {
   }
 
   // 私有验证方法
-  private validateTextToVideoOptions(options: Veo3TextToVideoOptions): void {
+  private validateTextToVideoOptions(options: Veo3GenerateOptions): void {
     if (!options.prompt) {
       throw createValidationError('prompt is required');
     }
