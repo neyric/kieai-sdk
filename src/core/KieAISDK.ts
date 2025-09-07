@@ -4,9 +4,7 @@ import { FluxKontextModule } from "../modules/FluxKontextModule";
 import { MidjourneyModule } from "../modules/MidjourneyModule";
 import { RunwayModule } from "../modules/RunwayModule";
 import { Veo3Module } from "../modules/Veo3Module";
-import { JobsModule } from "../common/JobsModule";
-
-import * as seeDance from "../types/modules/jobs-module/see-dance";
+import { createSeeDanceModules } from "../modules/jobs-module/see-dance";
 
 export interface SDKConfig {
   baseURL?: string;
@@ -22,28 +20,7 @@ export class KieAISDK {
   public readonly midjourney: MidjourneyModule;
   public readonly runway: RunwayModule;
   public readonly veo3: Veo3Module;
-  public readonly seeDance: {
-    v1ProI2V: JobsModule<
-      seeDance.SeeDanceI2VGenerateOptions,
-      seeDance.SeeDanceGenerateResult,
-      (typeof seeDance)["v1ProI2V"]
-    >;
-    v1ProT2V: JobsModule<
-      seeDance.SeeDanceT2VGenerateOptions,
-      seeDance.SeeDanceGenerateResult,
-      (typeof seeDance)["v1ProT2V"]
-    >;
-    v1LiteI2V: JobsModule<
-      seeDance.SeeDanceI2VGenerateOptions,
-      seeDance.SeeDanceGenerateResult,
-      (typeof seeDance)["v1LiteI2V"]
-    >;
-    v1LiteT2V: JobsModule<
-      seeDance.SeeDanceT2VGenerateOptions,
-      seeDance.SeeDanceGenerateResult,
-      (typeof seeDance)["v1LiteT2V"]
-    >;
-  };
+  public readonly seeDance: ReturnType<typeof createSeeDanceModules>;
 
   constructor(config: SDKConfig) {
     if (!config.apiKey) {
@@ -61,12 +38,7 @@ export class KieAISDK {
     this.midjourney = new MidjourneyModule(this.httpClient);
     this.runway = new RunwayModule(this.httpClient);
     this.veo3 = new Veo3Module(this.httpClient);
-    this.seeDance = {
-      v1ProI2V: new JobsModule(seeDance.v1ProI2V, this.httpClient),
-      v1ProT2V: new JobsModule(seeDance.v1ProT2V, this.httpClient),
-      v1LiteI2V: new JobsModule(seeDance.v1LiteI2V, this.httpClient),
-      v1LiteT2V: new JobsModule(seeDance.v1LiteT2V, this.httpClient),
-    };
+    this.seeDance = createSeeDanceModules(this.httpClient);
   }
 
   /**

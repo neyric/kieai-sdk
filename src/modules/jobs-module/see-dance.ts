@@ -1,3 +1,6 @@
+import { JobsModule } from "../../common/JobsModule";
+import { HttpClient } from "../../core/HttpClient";
+
 export const v1ProI2V = "bytedance/v1-pro-image-to-video" as const;
 export const v1ProT2V = "bytedance/v1-pro-text-to-video" as const;
 export const v1LiteI2V = "bytedance/v1-lite-image-to-video" as const;
@@ -60,4 +63,49 @@ export interface SeeDanceT2VGenerateOptions
 
 export interface SeeDanceGenerateResult {
   resultUrls: string[];
+}
+
+export function createSeeDanceModules(httpClient: HttpClient) {
+  const modules = {
+    v1ProI2V: new JobsModule<
+      SeeDanceI2VGenerateOptions,
+      SeeDanceGenerateResult,
+      typeof v1ProI2V
+    >(v1ProI2V, httpClient),
+    v1ProT2V: new JobsModule<
+      SeeDanceT2VGenerateOptions,
+      SeeDanceGenerateResult,
+      typeof v1ProT2V
+    >(v1ProT2V, httpClient),
+    v1LiteI2V: new JobsModule<
+      SeeDanceI2VGenerateOptions,
+      SeeDanceGenerateResult,
+      typeof v1LiteI2V
+    >(v1LiteI2V, httpClient),
+    v1LiteT2V: new JobsModule<
+      SeeDanceT2VGenerateOptions,
+      SeeDanceGenerateResult,
+      typeof v1LiteT2V
+    >(v1LiteT2V, httpClient),
+
+    verifyCallback(callbackData: unknown) {
+      const data = callbackData as any;
+      const model = data?.data?.model;
+
+      switch (model) {
+        case v1ProI2V:
+          return modules.v1ProI2V.verifyCallback(callbackData);
+        case v1ProT2V:
+          return modules.v1ProT2V.verifyCallback(callbackData);
+        case v1LiteI2V:
+          return modules.v1LiteI2V.verifyCallback(callbackData);
+        case v1LiteT2V:
+          return modules.v1LiteT2V.verifyCallback(callbackData);
+        default:
+          return modules.v1ProI2V.verifyCallback(callbackData);
+      }
+    },
+  } as const;
+
+  return modules;
 }
