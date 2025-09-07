@@ -143,18 +143,7 @@ export interface Veo3TaskData {
   fallbackFlag: boolean;
 }
 
-/**
- * 获取Veo3视频生成任务的高清1080P版本。
- * - 通过托底模式生成的视频无法通过此接口访问，因为它们默认已经是1080p分辨率。
- * - 仅 16:9 宽高比的视频支持 1080P 高清生成
- * - 视频生成任务成功后，系统会自动开始生成 1080P 高清版本
- * - 1080P 视频生成需要额外处理时间，建议在原视频生成完成后等待一段时间再调用本接口
- * - 如果 1080P 视频尚未准备好，接口可能返回错误信息
- * ## 重要说明
- * 1. 只有成功生成的视频任务才能获取 1080P 的版本
- * 2. 建议在收到视频生成成功回调后等待几分钟再调用本接口
- */
-export interface Veo3Task1080PVideoResult {
+export interface Veo3Task1080pVideoResult {
   resultUrl: string;
 }
 
