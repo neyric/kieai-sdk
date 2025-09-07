@@ -1,4 +1,5 @@
 import { BaseModule } from "../core/BaseModule";
+import type { APIResponse } from "../types/common";
 import { createValidationError } from "../types/errors";
 import {
   type MidjourneyGenerateRequest,
@@ -181,10 +182,10 @@ export class MidjourneyModule extends BaseModule {
    * 验证回调数据
    */
   async verifyCallback(callbackData: unknown) {
-    const data = callbackData as MidjourneyCallbackData;
-    if (!data?.taskId) {
+    const data = callbackData as APIResponse<MidjourneyCallbackData>;
+    if (!data?.data?.taskId) {
       throw createValidationError("Invalid callback data: taskId is required");
     }
-    return this.getTaskDetails(data.taskId);
+    return this.getTaskDetails(data.data?.taskId);
   }
 }

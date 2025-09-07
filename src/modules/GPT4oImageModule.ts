@@ -1,4 +1,5 @@
 import { BaseModule } from "../core/BaseModule";
+import type { APIResponse } from "../types/common";
 import { createValidationError } from "../types/errors";
 import {
   type GenerateImageOptions,
@@ -93,8 +94,8 @@ export class GPT4oImageModule extends BaseModule {
    * @param callbakData callback 携带的数据
    */
   async verifyCallback(callbakData: unknown) {
-    const data = callbakData as GPT4oImageCallbackData;
-    if (!data.taskId) throw createValidationError("Unvalid taskID");
-    return this.getTaskStatus(data.taskId);
+    const data = callbakData as APIResponse<GPT4oImageCallbackData>;
+    if (!data?.data?.taskId) throw createValidationError("Unvalid taskID");
+    return this.getTaskStatus(data.data.taskId);
   }
 }

@@ -1,4 +1,5 @@
 import { BaseModule } from "../core/BaseModule";
+import type { APIResponse } from "../types/common";
 import { createValidationError } from "../types/errors";
 import {
   type FluxKontextGenerateRequest,
@@ -66,8 +67,8 @@ export class FluxKontextModule extends BaseModule {
    * @param callbakData callback 携带的数据
    */
   async verifyCallback(callbakData: unknown) {
-    const data = callbakData as FluxKontextCallbackData;
-    if (!data.taskId) throw createValidationError("Unvalid taskID");
-    return this.getTaskStatus(data.taskId);
+    const data = callbakData as APIResponse<FluxKontextCallbackData>;
+    if (!data?.data?.taskId) throw createValidationError("Unvalid taskID");
+    return this.getTaskStatus(data.data.taskId);
   }
 }

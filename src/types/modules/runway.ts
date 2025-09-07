@@ -2,6 +2,8 @@
  * Runway API 相关类型定义
  */
 
+import type { APIResponse } from "../common";
+
 /**
  * 支持的视频宽高比
  */
@@ -201,6 +203,11 @@ export interface RunwayAlephGenerateResponse {
   resultVideoUrl: string;
   resultImageUrl: string;
 }
+
+export type RunwayAlephCallbackData = APIResponse<{
+  result_video_url: string;
+  result_image_url: string;
+}> & { taskId: string };
 
 export interface RunwayAlephGenerateResult {
   taskId: string;
