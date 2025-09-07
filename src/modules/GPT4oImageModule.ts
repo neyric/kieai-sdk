@@ -1,5 +1,4 @@
 import { BaseModule } from "../core/BaseModule";
-import type { APIResponse } from "../types/common";
 import { createValidationError } from "../types/errors";
 import {
   type GenerateImageOptions,

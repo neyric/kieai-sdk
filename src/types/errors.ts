@@ -1,4 +1,3 @@
-import { type APIResponse } from "./common";
 /**
  * 错误代码常量
  */

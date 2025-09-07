@@ -4,7 +4,12 @@ import { FluxKontextModule } from "../modules/FluxKontextModule";
 import { MidjourneyModule } from "../modules/MidjourneyModule";
 import { RunwayModule } from "../modules/RunwayModule";
 import { Veo3Module } from "../modules/Veo3Module";
-import type { SDKConfig } from "../types/common";
+
+interface SDKConfig {
+  baseURL?: string;
+  timeout?: number;
+  apiKey: string;
+}
 
 export class KieAISDK {
   private readonly httpClient: HttpClient;

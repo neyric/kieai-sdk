@@ -2,7 +2,6 @@
  * Runway API 相关类型定义
  */
 
-import type { APIResponse } from "../common";
 
 /**
  * 支持的视频宽高比

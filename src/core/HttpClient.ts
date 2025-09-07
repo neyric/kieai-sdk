@@ -1,4 +1,3 @@
-import type { APIResponse } from "../types/common";
 import {
   KieError,
   KieErrorType,
