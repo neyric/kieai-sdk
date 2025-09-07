@@ -14,6 +14,7 @@ export * from "./types/modules/flux-kontext";
 export * from "./types/modules/midjourney";
 export * from "./types/modules/runway";
 export * from "./types/modules/veo3";
+export * from "./types/modules/jobs-module";
 
 import { KieAISDK } from "./core/KieAISDK";
 export default KieAISDK;
