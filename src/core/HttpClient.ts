@@ -49,6 +49,11 @@ export class HttpClient {
       requestHeaders.set("Authorization", `Bearer ${this.apiKey}`);
     }
 
+    const headersJSON: Record<string, string> = {};
+    requestHeaders.forEach((value, key) => {
+      headersJSON[key] = value;
+    });
+
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), this.timeout);
 
@@ -72,7 +77,7 @@ export class HttpClient {
               method,
               url: requestURL,
               params,
-              headers: requestHeaders.toJSON(),
+              headers: headersJSON,
             },
           }
         );
@@ -85,7 +90,7 @@ export class HttpClient {
           method,
           url: requestURL,
           params,
-          headers: requestHeaders.toJSON(),
+          headers: headersJSON,
         });
       }
 
@@ -110,7 +115,7 @@ export class HttpClient {
                 method,
                 url: requestURL,
                 params,
-                headers: requestHeaders.toJSON(),
+                headers: headersJSON,
               },
             }
           );
@@ -121,7 +126,7 @@ export class HttpClient {
           method,
           url: requestURL,
           params,
-          headers: requestHeaders.toJSON(),
+          headers: headersJSON,
         });
       }
 
@@ -135,7 +140,7 @@ export class HttpClient {
             method,
             url: requestURL,
             params,
-            headers: requestHeaders.toJSON(),
+            headers: headersJSON,
           },
         }
       );

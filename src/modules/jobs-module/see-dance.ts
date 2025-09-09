@@ -26,7 +26,7 @@ interface SeeDanceVideoGenerateOptions {
    * @default "5"
    *  */
   duration?: "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12";
-  /** Whether to fix the camera position */
+  /** Whether to fixed the camera position */
   camera_fixed?: boolean;
   /** Random seed to control video generation. Use -1 for random */
   seed?: number;
