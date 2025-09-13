@@ -6,6 +6,7 @@ import { RunwayModule } from "../modules/RunwayModule";
 import { Veo3Module } from "../modules/Veo3Module";
 import { createSeeDanceModules } from "../modules/jobs-module/see-dance";
 import { createNanoBananaModules } from "../modules/jobs-module/nano-banana";
+import { createSeedreamModules } from "../modules/jobs-module/seedream";
 
 export interface SDKConfig {
   baseURL?: string;
@@ -23,6 +24,7 @@ export class KieAISDK {
   public readonly veo3: Veo3Module;
   public readonly seeDance: ReturnType<typeof createSeeDanceModules>;
   public readonly nanoBanana: ReturnType<typeof createNanoBananaModules>;
+  public readonly seedream: ReturnType<typeof createSeedreamModules>;
 
   constructor(config: SDKConfig) {
     if (!config.apiKey) {
@@ -42,6 +44,7 @@ export class KieAISDK {
     this.veo3 = new Veo3Module(this.httpClient);
     this.seeDance = createSeeDanceModules(this.httpClient);
     this.nanoBanana = createNanoBananaModules(this.httpClient);
+    this.seedream = createSeedreamModules(this.httpClient);
   }
 
   /**
