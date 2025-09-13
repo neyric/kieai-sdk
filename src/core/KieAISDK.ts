@@ -12,6 +12,7 @@ import { createWan22Modules } from "../modules/jobs-module/wan22";
 import { createNanoBananaModules } from "../modules/jobs-module/nano-banana";
 import { createSeedreamModules } from "../modules/jobs-module/seedream";
 import { createKlingModules } from "../modules/jobs-module/kling";
+import { createImageEditModules } from "../modules/jobs-module/image-edit";
 
 export interface SDKConfig {
   baseURL?: string;
@@ -35,6 +36,7 @@ export class KieAISDK {
   public readonly nanoBanana: ReturnType<typeof createNanoBananaModules>;
   public readonly seedream: ReturnType<typeof createSeedreamModules>;
   public readonly kling: ReturnType<typeof createKlingModules>;
+  public readonly imageEdit: ReturnType<typeof createImageEditModules>;
 
   constructor(config: SDKConfig) {
     if (!config.apiKey) {
@@ -60,6 +62,7 @@ export class KieAISDK {
     this.nanoBanana = createNanoBananaModules(this.httpClient);
     this.seedream = createSeedreamModules(this.httpClient);
     this.kling = createKlingModules(this.httpClient);
+    this.imageEdit = createImageEditModules(this.httpClient);
   }
 
   /**
