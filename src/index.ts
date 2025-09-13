@@ -17,6 +17,7 @@ export * from "./types/modules/veo3";
 
 export type * from "./modules/jobs-module/see-dance";
 export type * from "./modules/jobs-module/nano-banana";
+export type * from "./modules/jobs-module/wan22";
 
 import { KieAISDK } from "./core/KieAISDK";
 export default KieAISDK;

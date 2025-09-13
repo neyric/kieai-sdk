@@ -5,6 +5,8 @@ import { MidjourneyModule } from "../modules/MidjourneyModule";
 import { RunwayModule } from "../modules/RunwayModule";
 import { Veo3Module } from "../modules/Veo3Module";
 import { createSeeDanceModules } from "../modules/jobs-module/see-dance";
+import { createImagen4Modules } from "../modules/jobs-module/imagen4";
+import { createWan22Modules } from "../modules/jobs-module/wan22";
 import { createNanoBananaModules } from "../modules/jobs-module/nano-banana";
 import { createSeedreamModules } from "../modules/jobs-module/seedream";
 import { createKlingModules } from "../modules/jobs-module/kling";
@@ -24,6 +26,8 @@ export class KieAISDK {
   public readonly runway: RunwayModule;
   public readonly veo3: Veo3Module;
   public readonly seeDance: ReturnType<typeof createSeeDanceModules>;
+  public readonly imagen4: ReturnType<typeof createImagen4Modules>;
+  public readonly wan22: ReturnType<typeof createWan22Modules>;
   public readonly nanoBanana: ReturnType<typeof createNanoBananaModules>;
   public readonly seedream: ReturnType<typeof createSeedreamModules>;
   public readonly kling: ReturnType<typeof createKlingModules>;
@@ -45,6 +49,8 @@ export class KieAISDK {
     this.runway = new RunwayModule(this.httpClient);
     this.veo3 = new Veo3Module(this.httpClient);
     this.seeDance = createSeeDanceModules(this.httpClient);
+    this.imagen4 = createImagen4Modules(this.httpClient);
+    this.wan22 = createWan22Modules(this.httpClient);
     this.nanoBanana = createNanoBananaModules(this.httpClient);
     this.seedream = createSeedreamModules(this.httpClient);
     this.kling = createKlingModules(this.httpClient);
