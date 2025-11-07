@@ -1,6 +1,6 @@
 {
   "name": "kieai-sdk",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "KieAI API SDK - 提供完整的 AI API 访问功能",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
