@@ -4,7 +4,6 @@
  */
 
 import type { Plugin, PluginContext } from '../../core/types';
-import { createConfigError } from '../../core/errors';
 import type {
   SeeDanceV1API,
   ImageToVideoOptions,
@@ -19,21 +18,6 @@ import {
   validateTextToVideoOptions,
   validateTaskId,
 } from './validators';
-
-// Export types for external usage
-export type {
-  SeeDanceV1API,
-  ImageToVideoOptions,
-  TextToVideoOptions,
-  TaskResponse,
-  TaskRecord,
-  ModelMode,
-  VideoResolution,
-  VideoDuration,
-  AspectRatio,
-  TaskState,
-  VideoResult,
-} from './api';
 
 /**
  * Model identifiers based on mode
@@ -72,15 +56,12 @@ export const SeeDanceV1Plugin: Plugin<SeeDanceV1API> = {
   },
 
   onInit: (ctx: PluginContext) => {
-    // Validate API key is configured
+    // 检查配置
     if (!ctx.config.apiKey) {
-      throw createConfigError(
-        'SeeDance V1 plugin requires an API key',
-        'Configure apiKey in SDK config'
-      );
+      throw new Error('SeeDance V1 plugin requires API key');
     }
 
-    // Log initialization
+    // 可以在这里添加日志
     ctx.config.logger?.info?.('SeeDance V1 plugin initialized');
   },
 
@@ -200,3 +181,7 @@ export const SeeDanceV1Plugin: Plugin<SeeDanceV1API> = {
     // Cleanup resources if needed
   },
 };
+
+// 导出类型
+export type { SeeDanceV1API } from './api';
+export * from './api';

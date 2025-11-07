@@ -30,7 +30,10 @@ export function validateTextToVideoOptions(
     ) {
       throw createValidationError(
         "seeds must be a number between 10000 and 99999",
-        { field: "seeds" },
+        {
+          field: "seeds",
+          value: options.seeds,
+        },
       );
     }
   }
@@ -39,6 +42,7 @@ export function validateTextToVideoOptions(
   if (options.aspectRatio && !["16:9", "9:16"].includes(options.aspectRatio)) {
     throw createValidationError('aspectRatio must be either "16:9" or "9:16"', {
       field: "aspectRatio",
+      value: options.aspectRatio,
     });
   }
 
@@ -46,6 +50,7 @@ export function validateTextToVideoOptions(
   if (options.model && !["veo3", "veo3_fast"].includes(options.model)) {
     throw createValidationError('model must be either "veo3" or "veo3_fast"', {
       field: "model",
+      value: options.model,
     });
   }
 }
@@ -66,6 +71,7 @@ export function validateImageToVideoOptions(
   if (typeof options.imageUrl !== "string" || options.imageUrl.trim() === "") {
     throw createValidationError("imageUrl must be a non-empty string", {
       field: "imageUrl",
+      value: options.imageUrl,
     });
   }
 
@@ -75,6 +81,7 @@ export function validateImageToVideoOptions(
   } catch {
     throw createValidationError("imageUrl must be a valid URL", {
       field: "imageUrl",
+      value: options.imageUrl,
     });
   }
 }
@@ -90,6 +97,7 @@ export function validateTaskId(taskId: string): void {
   if (typeof taskId !== "string" || taskId.trim() === "") {
     throw createValidationError("taskId must be a non-empty string", {
       field: "taskId",
+      value: taskId,
     });
   }
 }

@@ -42,11 +42,10 @@ export const GoogleVeo3Plugin: Plugin<GoogleVeo3API> = {
    */
   onInit: ({ config }: PluginContext) => {
     if (!config.apiKey) {
-      throw createValidationError(
-        "Google Veo3 plugin requires apiKey in SDK configuration",
-        "apiKey",
-      );
+      throw new Error('Google Veo3 plugin requires API key');
     }
+
+    config.logger?.info?.('Google Veo3 plugin initialized');
   },
 
   /**
@@ -130,7 +129,7 @@ export const GoogleVeo3Plugin: Plugin<GoogleVeo3API> = {
         if (!data?.taskId) {
           throw createValidationError(
             "Invalid callback data: taskId is required",
-            "taskId",
+            { field: "taskId" },
           );
         }
         return client.get<Veo3TaskData>("/api/v1/veo/record-info", {
