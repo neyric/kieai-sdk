@@ -1,24 +1,20 @@
-export { KieAISDK } from "./core/KieAISDK";
-export { HttpClient } from "./core/HttpClient";
-export { BaseModule } from "./core/BaseModule";
+/**
+ * KieAI SDK 主入口文件
+ * 插件化架构 - 所有功能以插件形式提供
+ */
 
-export { GPT4oImageModule } from "./modules/GPT4oImageModule";
-export { FluxKontextModule } from "./modules/FluxKontextModule";
-export { MidjourneyModule } from "./modules/MidjourneyModule";
-export { RunwayModule } from "./modules/RunwayModule";
-export { Veo3Module } from "./modules/Veo3Module";
+// ========== Core 导出 ==========
+export { KieAISDK } from './core/sdk';
+export type { SDKConfig, Plugin, PluginContext, HttpClient } from './core/types';
+export { SDKError, SDKErrorKind } from './core/errors';
 
-export * from "./types/errors";
-export * from "./types/modules/gpt-image";
-export * from "./types/modules/flux-kontext";
-export * from "./types/modules/midjourney";
-export * from "./types/modules/runway";
-export * from "./types/modules/veo3";
+// ========== 官方插件导出 ==========
+export { MidjourneyPlugin } from './plugins/midjourney';
+export type { MidjourneyAPI } from './plugins/midjourney';
 
-export type * from "./modules/jobs-module/see-dance";
-export type * from "./modules/jobs-module/nano-banana";
-export type * from "./modules/jobs-module/wan22";
-export type * from "./modules/jobs-module/ideogram";
+export { SeeDanceV1Plugin } from './plugins/seedance-v1';
+export type { SeeDanceV1API } from './plugins/seedance-v1';
 
-import { KieAISDK } from "./core/KieAISDK";
+// ========== 默认导出 ==========
+import { KieAISDK } from './core/sdk';
 export default KieAISDK;
