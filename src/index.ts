@@ -35,6 +35,15 @@ export type { Kling25API } from "./plugins/kling-2-5";
 export { Wan25Plugin } from "./plugins/wan-2-5";
 export type { Wan25API } from "./plugins/wan-2-5";
 
+export { KlingV21Plugin } from "./plugins/kling-v2-1";
+export type { KlingV21API } from "./plugins/kling-v2-1";
+
+export { WanV22TurboPlugin } from "./plugins/wan-v2.2-turbo";
+export type { WanV22TurboAPI } from "./plugins/wan-v2.2-turbo";
+
+export { SoraV2Plugin } from "./plugins/sora-v2";
+export type { SoraV2API } from "./plugins/sora-v2";
+
 // ========== 默认导出 ==========
 import { KieAISDK } from "./core/sdk";
 export default KieAISDK;
